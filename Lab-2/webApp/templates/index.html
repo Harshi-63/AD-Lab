@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat vs Dog Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin: 15px;
+        }
+        input[type="file"], select {
+            padding: 5px;
+            margin: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+        #uploadedImage {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Cat vs Dog Classifier</h1>
+</header>
+
+<main>
+    <h2>Upload an image to classify as Cat or Dog</h2>
+    <form action="/predict" method="POST" enctype="multipart/form-data" id="uploadForm">
+        <div class="form-group">
+            <label for="image">Choose an Image</label>
+            <input type="file" name="image" id="image" required>
+        </div>
+
+        <div class="form-group">
+            <label for="model">Choose Model</label>
+            <select name="model" id="model">
+                <option value="cnn">CNN (Deep Learning)</option>
+                <option value="svm">SVM (SGD)</option>
+                <option value="rf">Random Forest</option>
+                <option value="logreg">Logistic Regression</option>
+                <option value="kmeans">KMeans</option>
+            </select>
+        </div>
+
+        <button type="submit">Classify</button>
+    </form>
+
+    <div class="form-group">
+        <button id="showImageBtn" onclick="showImage()">Show Image</button>
+        <button id="refreshBtn" onclick="refreshPage()">Refresh</button>
+    </div>
+
+    <div id="result"></div>
+
+    <img id="uploadedImage" src="" alt="Uploaded Image" />
+</main>
+
+<script>
+    // Function to handle image display
+    function showImage() {
+        const fileInput = document.getElementById('image');
+        const uploadedImage = document.getElementById('uploadedImage');
+
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                uploadedImage.src = e.target.result;
+                uploadedImage.style.display = 'block';  // Show the image
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Function to handle page refresh
+    function refreshPage() {
+        document.getElementById('uploadForm').reset();
+        document.getElementById('result').textContent = '';
+        document.getElementById('uploadedImage').style.display = 'none';
+    }
+
+    // Handle form submission with AJAX to avoid page reload
+    const form = document.getElementById('uploadForm');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        
+        const formData = new FormData(form);
+
+        fetch('/predict', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())  // Parse the JSON response from Flask
+        .then(data => {
+            if (data.prediction) {
+                resultDiv.innerHTML = "Prediction: " + data.prediction + "<br>Accuracy: " + data.accuracy + "%";
+            } else if (data.error) {
+                resultDiv.textContent = "Error: " + data.error;  // Display error if occurs
+            }
+        })
+        .catch(error => {
+            resultDiv.textContent = "Error: " + error;
+        });
+    });
+</script>
+
+</body>
+</html>
+
+
+
