@@ -1,0 +1,5 @@
+/scaler_features.pkl
+/scaler_target.pkl
+/lstm_stock_model.h5
+/linear_regression_stock_model.pkl
+/prediction.ipynb
