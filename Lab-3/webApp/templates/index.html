@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Prediction</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Stock Price Prediction</h1>
+    <form id="predict-form" method="POST" action="/predict">
+        <label for="open_price">Open Price:</label>
+        <input type="text" name="open_price" id="open_price" required><br><br>
+
+        <label for="high_price">High Price:</label>
+        <input type="text" name="high_price" id="high_price" required><br><br>
+
+        <label for="low_price">Low Price:</label>
+        <input type="text" name="low_price" id="low_price" required><br><br>
+
+        <label for="volume">Volume:</label>
+        <input type="text" name="volume" id="volume" required><br><br>
+
+        <label for="moving_avg">Moving Average:</label>
+        <input type="text" name="moving_avg" id="moving_avg" required><br><br>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <h2>Prediction Results</h2>
+    <div id="prediction-results">
+        <p>Linear Regression Prediction: <span id="lr-prediction"></span></p>
+        <p>LSTM Prediction: <span id="lstm-prediction"></span></p>
+    </div>
+
+    <h2>Model Comparison Graph</h2>
+    <canvas id="prediction-graph" width="400" height="200"></canvas>
+
+    <script>
+        const form = document.getElementById('predict-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('lr-prediction').innerText = data.linear_regression_prediction;
+                    document.getElementById('lstm-prediction').innerText = data.lstm_prediction;
+
+                    // Use Chart.js to render the graph
+                    const ctx = document.getElementById('prediction-graph').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar', // Bar chart type
+                        data: data.chart_data, // Data for the chart
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+            })
+            .catch(error => alert('Error: ' + error));
+        });
+    </script>
+</body>
+</html>
