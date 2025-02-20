@@ -1,0 +1,22 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 50px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+.upload-section, .chat-section {
+    margin: 20px 0;
+}
+button {
+    padding: 8px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+input {
+    padding: 8px;
+    width: 250px;
+}
+
