@@ -94,4 +94,3 @@ async function sendQuery() {
         chatResponse.style.color = "red";
     }
 }
-

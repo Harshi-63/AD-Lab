@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper with LLM</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Web Scraper using LLM</h1>
+        <input type="text" id="urlInput" placeholder="Enter website URL">
+        <button onclick="scrapeData()">Scrape & Summarize</button>
+        <div id="result">
+            <h2>Scraped Content</h2>
+            <p id="scrapedText"></p>
+            <h2>Summarized Output</h2>
+            <p id="summaryText"></p>
+        </div>
+    </div>
+
+    <script>
+        function scrapeData() {
+            let url = document.getElementById("urlInput").value;
+            if (!url) {
+                alert("Please enter a URL!");
+                return;
+            }
+
+            fetch("/scrape", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                document.getElementById("scrapedText").innerText = data.scraped;
+                document.getElementById("summaryText").innerText = data.summary;
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+</html>
