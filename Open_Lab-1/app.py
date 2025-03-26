@@ -7,11 +7,15 @@ import google.generativeai as genai
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Flask app setup
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests
-app.secret_key = "supersecretkey"
+app.secret_key = "defaultsecretkey"
 
 # Upload configurations
 UPLOAD_FOLDER = 'uploads'
@@ -23,7 +27,7 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 # Configure Gemini API Key
-genai.configure(api_key="GEMINI_API")  # Replace with your API key
+genai.configure(api_key="AIzaSyBkyOKSN_fW7JB0-aTkmd_hbNEEMpyyGws")  # Replace with your API key
 
 # Load embedding model
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -45,6 +49,14 @@ def split_text(text, chunk_size=500, overlap=50):
     """Splits text into smaller chunks."""
     splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=overlap)
     return splitter.split_text(text)
+
+
+def truncate_text(text, word_limit=80):
+    """Truncate text to the specified word limit."""
+    words = text.split()
+    if len(words) > word_limit:
+        return " ".join(words[:word_limit]) + "..."
+    return text
 
 
 def get_gemini_response(prompt):
@@ -69,13 +81,14 @@ def search_similar_chunks(index, embeddings, query, chunks, k=3):
     return [chunks[i] for i in top_k_indices[0]]
 
 
-def analyze_resume(chunks, analyze):
+def analyze_resume(chunks, query):
     """Performs resume analysis using Gemini AI and FAISS."""
     index, embeddings = embed_chunks(chunks)
-    docs = search_similar_chunks(index, embeddings, analyze, chunks)
-    combined_text = "\n\n".join(docs)
-    prompt = f"{analyze}\n\nResume Content:\n{combined_text}"
-    return get_gemini_response(prompt)
+    relevant_chunks = search_similar_chunks(index, embeddings, query, chunks)
+    combined_text = "\n\n".join(relevant_chunks)
+    prompt = f"{query}\n\nResume Content:\n{combined_text}"
+    response = get_gemini_response(prompt)
+    return truncate_text(response, word_limit=80)
 
 
 @app.route('/')
@@ -107,18 +120,15 @@ def upload_file():
         chunks = split_text(resume_text)
 
         # Queries for analysis
-        summary_query = "Provide a detailed summary of the resume:\n\n" + "\n".join(chunks)
-        strengths_query = "Analyze and explain the strengths of this resume:\n\n" + "\n".join(chunks)
-        weaknesses_query = "Analyze the weaknesses of this resume and suggest improvements:\n\n" + "\n".join(chunks)
-        job_suggestions_query = "Based on this resume, suggest job roles that can be applied on LinkedIn:\n\n" + "\n".join(chunks)
-
-        # Generate responses
-        response = {
-            "summary": analyze_resume(chunks, summary_query),
-            "strengths": analyze_resume(chunks, strengths_query),
-            "weaknesses": analyze_resume(chunks, weaknesses_query),
-            "job_suggestions": analyze_resume(chunks, job_suggestions_query)
+        queries = {
+            "summary": "Provide a detailed summary of the resume:",
+            "strengths": "Analyze and explain the strengths of this resume:",
+            "weaknesses": "Analyze the weaknesses of this resume and suggest improvements:",
+            "job_suggestions": "Based on this resume, suggest job roles that can be applied on LinkedIn:"
         }
+
+        # Generate and truncate responses
+        response = {key: analyze_resume(chunks, query) for key, query in queries.items()}
 
         flash("File uploaded and analyzed successfully!")
         return jsonify(response)
