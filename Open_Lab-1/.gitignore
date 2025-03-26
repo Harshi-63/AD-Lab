@@ -1,2 +1,3 @@
 myenv/Lib/
-.starkaiclone-firebase-adminsdk-fbsvc-0bd8004e99.json
+starkaiclone-firebase-adminsdk-fbsvc-0bd8004e99.json
+secret.env

@@ -23,7 +23,7 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 # Configure Gemini API Key
-genai.configure(api_key="AIzaSyDpqHUCWQZKasQ7OEWTWjxVVxPYOAnV2jg")  # Replace with your API key
+genai.configure(api_key="GEMINI_API")  # Replace with your API key
 
 # Load embedding model
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
