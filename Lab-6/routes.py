@@ -23,18 +23,13 @@ def register():
     form = RegistrationForm()
 
     if request.method == 'POST':
-        print("🔹 Request received in Flask")  # Debugging
-
-        # Debugging: Print form data (only for browser)
-        print("Form Data:")
-        print(f"Username: {form.username.data}")
-        print(f"Email: {form.email.data}")
-        print(f"Password: {form.password.data}")
-
-        if request.is_json:  # If request is from Postman (API)
+        if request.is_json:  # Handling Postman JSON request
             data = request.get_json()
-            if not data or "username" not in data or "email" not in data or "password" not in data:
+            if not data or "username" not in data or "email" not in data or "password" not in data or "confirm_password" not in data:
                 return jsonify({"message": "Missing required fields"}), 400
+
+            if data['password'] != data['confirm_password']:
+                return jsonify({"message": "Passwords do not match"}), 400
 
             hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
             cur = mysql.connection.cursor()
@@ -44,9 +39,7 @@ def register():
             cur.close()
             return jsonify({"message": "Account created successfully!"}), 201
 
-        elif form.validate_on_submit():  # If request is from an HTML form
-            print("✅ Form validation passed!")  # Debugging
-
+        elif form.validate_on_submit():  # Handling HTML form request
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
             cur = mysql.connection.cursor()
             cur.execute("INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)",
@@ -55,8 +48,6 @@ def register():
             cur.close()
             flash('Account created successfully! You can now log in.', 'success')
             return redirect(url_for('login'))
-        else:
-            print("❌ Form validation failed!")  # Debugging
 
     return render_template('register.html', form=form)
 
