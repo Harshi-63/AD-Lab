@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stark.ai Clone</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #222;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            height: 30px;
+            margin-right: 10px;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: black;
+            font-size: 16px;
+        }
+        .discover-btn {
+            background-color: #ff9800;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+        }
+        .auth-buttons .login {
+            background-color: transparent;
+            color: #333;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+        .auth-buttons .signup {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+        .hero {
+            background: linear-gradient(135deg, #f9f9f9, #eef1f6);
+            color: black;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .upload-box {
+            text-align: center;
+            background-color: #fff;
+            border: 2px dashed #ccc;
+            padding: 40px;
+            width: 50%;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .upload-box p {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .upload-box .upload-icon {
+            font-size: 40px;
+            color: #555;
+        }
+        .upload-label {
+            display: inline-block;
+            padding: 10px 20px;
+            border: 2px solid #007bff;
+            color: #007bff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .upload-label:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .output-box {
+        text-align: center;
+        background-color: #fff;
+        border: 2px solid #007bff;
+        padding: 20px;
+        width: 50%;
+        margin: 20px auto;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: none;
+    }
+        .features {
+            text-align: center;
+            padding: 50px;
+        }
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+        .feature-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .feature-card h2 {
+            font-size: 18px;
+        }
+        .feature-card p {
+            font-size: 16px;
+            color: #666;
+        }
+        .footer {
+            background-color: #1c1c1c;
+            color: white;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .footer .column {
+            width: 25%;
+        }
+        .footer .column h3 {
+            margin-bottom: 10px;
+        }
+        .footer .column ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer .column ul li {
+            margin-bottom: 8px;
+        }
+        .footer .column ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .footer .contact {
+            display: flex;
+            flex-direction: column;
+        }
+        .footer .social-icons {
+            margin-top: 10px;
+        }
+        .footer .social-icons a {
+            margin-right: 10px;
+            color: white;
+            font-size: 20px;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .feature-cards {
+                grid-template-columns: 1fr;
+            }
+            .footer .column {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="https://images.assets.stark.ai/image/stark-256.png" alt="Stark.ai Logo"> Stark.ai
+        </div>
+        <div class="nav-links">
+            <a href="#">Instant Interviews</a>
+            <a href="#">Copilot</a>
+            <a href="#">Features</a>
+            <button class="discover-btn">Discover More ▼</button>
+        </div>
+        <div class="auth-buttons">
+            <button class="login" onclick="openModal('loginModal')">Login</button>
+            <button class="signup" onclick="openModal('signupModal')">Signup</button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="upload-box">
+            <div class="upload-icon">☁</div>
+            <p><strong>Upload Resume</strong></p>
+            <p>Drag or click to upload</p>
+            <input type="file" id="resumeUpload" accept=".pdf,.doc,.docx" style="display: none;">
+            <label for="resumeUpload" class="upload-label">Choose File</label>
+            <p id="fileName"></p>
+        </div>
+
+    <!-- Special Output Box -->
+    <div id="outputBox" class="output-box" style="display: none;">
+        <h3>Uploaded File Details</h3>
+        <p id="fileName"></p>
+        <p id="fileSize"></p>
+    </div>
+    </header>
+
+    <script>
+        document.getElementById('resumeUpload').addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                document.getElementById('fileName').textContent = 'Selected File: ${file.name}';
+            } else {
+                document.getElementById('fileName').textContent = "";
+            }
+        });
+    </script>
+
+    <section class="features">
+        <h1>Revolutionary Features of Stark.ai</h1>
+        <div class="feature-cards">
+            <div class="feature-card">
+                <h2>Instant Interviews – Your Career, No Waiting!</h2>
+                <p>Skip the wait! Stark.ai connects you directly with top companies for instant interviews, all aligned with your resume.</p>
+                <a href="#">Start Now →</a>
+            </div>
+            <div class="feature-card">
+                <h2>Ace Your Next Interview with AI-Powered Practice</h2>
+                <p>Step into your next interview with confidence! Our AI-driven mock interviews provide personalized feedback.</p>
+                <a href="#">Start practicing today →</a>
+            </div>
+            <div class="feature-card">
+                <h2>Career Guru – Your AI-Powered Career Coach</h2>
+                <p>Navigate your career with confidence! Career Guru provides personalized advice and actionable insights.</p>
+                <a href="#">Shape your future →</a>
+            </div>
+            <div class="feature-card">
+                <h2>Meet Your Career Copilot – Smarter, Faster, Effortless</h2>
+                <p>Unlock your potential with instant job matches, bulk applications, and AI-generated cover letters.</p>
+                <a href="#">Find Your Match Now →</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="column">
+            <h3>Features</h3>
+            <ul>
+                <li><a href="#">Copilot</a></li>
+                <li><a href="#">Career Guru</a></li>
+                <li><a href="#">AI Scoring</a></li>
+                <li><a href="#">AI Mock Interview</a></li>
+            </ul>
+        </div>
+        <div class="column">
+            <h3>Solutions</h3>
+            <ul>
+                <li><a href="#">Employers</a></li>
+                <li><a href="#">Colleges</a></li>
+                <li><a href="#">Staffing</a></li>
+                <li><a href="#">Government</a></li>
+            </ul>
+        </div>
+        <div class="column">
+            <h3>Company</h3>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Press</a></li>
+            </ul>
+        </div>
+        <div class="column contact">
+            <h3>Contact</h3>
+            <p>Email: support@stark.ai</p>
+            <p>Phone: +1 234 567 890</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

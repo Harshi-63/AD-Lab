@@ -2,7 +2,7 @@ import ollama
 
 
 def process_text(text):
-    model = "mistral"  # Change this to an available model in Ollama
+    model = "mistral"  
     prompt = f"Summarize the following text:\n\n{text}"
 
     try:

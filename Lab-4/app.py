@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from llama_index.core import VectorStoreIndex
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.embeddings import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
 from llama_index.core.schema import Document
 from llama_index.core.query_engine import RetrieverQueryEngine
@@ -15,7 +15,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Set max request size (10MB for file uploads)
-app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  
+app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 
 # Define upload folder
 UPLOAD_FOLDER = "uploads"
