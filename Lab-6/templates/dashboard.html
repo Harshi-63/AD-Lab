@@ -1,9 +1,24 @@
-{% extends 'layout.html' %}
-
+{% extends "layout.html" %}
 {% block title %}Dashboard{% endblock %}
-
 {% block content %}
-<h2>Welcome, {{ current_user.username }}!</h2>
-<p>Your email: {{ current_user.email }}</p>
-<a href="{{ url_for('logout') }}">Logout</a>
+<div class="card mx-auto mt-5" style="max-width: 600px;">
+    <div class="card-body text-center">
+        <h3>Welcome, {{ user.username }}</h3>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <table border="1">
+            <tr>
+                <th>Subject</th>
+                <th>Grade</th>
+            </tr>
+            {% for subject, grade in grades %}
+            <tr>
+                <td>{{ subject }}</td>
+                <td>{{ grade }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
+</div>
 {% endblock %}
+
